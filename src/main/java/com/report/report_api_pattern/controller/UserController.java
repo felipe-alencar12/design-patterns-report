@@ -2,6 +2,7 @@ package com.report.report_api_pattern.controller;
 
 import com.report.report_api_pattern.domain.User;
 import com.report.report_api_pattern.repository.UserRepository;
+import com.report.report_api_pattern.service.impl.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +15,12 @@ public class UserController {
 
     private final UserRepository repository;
 
-    public UserController(UserRepository repository) {
+
+    private final UserService userService;
+
+    public UserController(UserRepository repository, UserService userService) {
         this.repository = repository;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -39,6 +44,12 @@ public class UserController {
     public ResponseEntity<User> postUser(@RequestBody User user){
         User savedUser = repository.save(user);
         return ResponseEntity.status(201).body(savedUser);
+    }
+
+    @PostMapping("/populate-users")
+    public String populateUsers(@RequestParam(defaultValue = "5") int quantity) {
+        userService.populateFakeUsers(quantity);
+        return quantity + " users generated and saved.";
     }
 
 }

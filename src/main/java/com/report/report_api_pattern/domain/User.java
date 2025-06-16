@@ -16,6 +16,8 @@ public class User {
 
     private String name;
 
+    private String email;
+
     // Relacionamento com ReportDomain
     @OneToMany(mappedBy = "user")
     private List<ReportDomain> reports;

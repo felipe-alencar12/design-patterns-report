@@ -33,8 +33,7 @@ public class DeepSeekClient {
                                     "role", "user",
                                     "content", userMessage
                             )
-                    )
-            );
+                    ));
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
@@ -46,7 +45,9 @@ public class DeepSeekClient {
                 List<Map<String, Object>> choices = (List<Map<String, Object>>) response.getBody().get("choices");
                 if (choices != null && !choices.isEmpty()) {
                     Map<String, Object> message = (Map<String, Object>) choices.get(0).get("message");
-                    return (String) message.get("content");
+                    String content = (String) message.get("content");
+                    content = content.replaceAll("(?s)```json|```", "").trim();
+                    return  content;
                 }
             }
             return "No response from DeepSeek";
